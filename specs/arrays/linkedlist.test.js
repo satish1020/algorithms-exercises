@@ -21,6 +21,14 @@
 
   As always, you can change describe to xdescribe to prevent the unit tests from running while
   you work
+
+  Note:
+  Generally if we want to modify/ add / delete an array we go with linked list data structure.
+  Delete and Insertion are good for linked list. 
+  Retrieving and finding is difficult with linked list.
+  Doubly linked list will have next as well as previous.
+  Practically we dont use linked list much in javascript because, Javascript array faster than anything we implement. If we are writing in c, c++ or java it is useful.
+
 */
 
 class LinkedList {
@@ -29,6 +37,7 @@ class LinkedList {
     this.tail = null;
     this.length = 0;
   }
+  // no return for push
   push(value) {
     const node = new Node(value);
     this.length++;
@@ -39,9 +48,12 @@ class LinkedList {
     }
     this.tail = node;
   }
+  // pop returns deleted node value.
   pop() {
     return this.delete(this.length - 1);
   }
+  //1,2,3 
+  //return the current pointer
   _find(index) {
     if (index >= this.length) return null;
     let current = this.head;
@@ -51,29 +63,47 @@ class LinkedList {
 
     return current;
   }
+  // returns value
   get(index) {
     const node = this._find(index);
     if (!node) return void 0;
     return node.value;
   }
+
+  //return node value deleted
   delete(index) {
+    // if index is zero, we want to delete the head
     if (index === 0) {
       const head = this.head;
+      // head exists that means we need to delete this and 
+      // we will assign next element of head a s head.
       if (head) {
         this.head = head.next;
       } else {
+        // if head doesnt exist that means it is empty and we assign head and tail as null
         this.head = null;
         this.tail = null;
       }
+      // decreasing the length of linked list as first element is deleted.
       this.length--;
+      // returns deleted node.
       return head.value;
     }
 
+    // if deleting element is not the first node then we need to find the node just before the
+    // node that we want to delete.
     const node = this._find(index - 1);
+    // exicse is the element that we need to delete. which is the next of the current node
     const excise = node.next;
+    // if excise node we want to delete is not present we return null.
     if (!excise) return null;
+    // else since we need to delete this node execise. 
+    // Current node.next will now be the excise node next as excise will be deleted.
     node.next = excise.next;
+    // if excise next node which is now the current node next node is not present 
+    // try ti understand this
     if (!node.next) this.tail = node.next;
+    // we are decreasing the length of the linked list.
     this.length--;
     return excise.value;
   }
